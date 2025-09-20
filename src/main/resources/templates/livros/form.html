@@ -16,19 +16,16 @@
   <input type="hidden" th:field="*{id}" />
   <div>
     <label>Título:</label>
-    <input th:field="*{titulo}" />
+    <input type="text" th:field="*{titulo}" />
     <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
   </div>
   <div>
     <label>Autor:</label>
-    <input th:field="*{autor}" />
+    <input type="text" th:field="*{autor}" />
   </div>
   <div>
     <label>Ano:</label>
-    <div>
-      <label>Ano:</label>
-      <input type="text" th:field="*{anoPublicacao}" />
-    </div
+    <input type="text" th:field="*{anoPublicacao}" />
   </div>
   <div>
     <label>
