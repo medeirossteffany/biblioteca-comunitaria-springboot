@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Livros</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1>Livros</h1>
+<div style="text-align: center; margin-bottom: 20px;">
+  <a th:href="@{/}">Home</a>
+  <a th:href="@{/livros/novo}">Novo Livro</a>
+  <a th:href="@{/livros/disponiveis}">Somente disponíveis</a>
+</div>
+
+<table>
+  <tr>
+    <th>Título</th>
+    <th>Autor</th>
+    <th>Ano</th>
+    <th>Status</th>
+    <th>Ações</th>
+  </tr>
+  <tr th:each="livro : ${livros}">
+    <td th:text="${livro.titulo}">Título</td>
+    <td th:text="${livro.autor}">Autor</td>
+    <td th:text="${livro.anoPublicacao}">Ano</td>
+    <td th:text="${livro.disponivel} ? 'Disponível' : 'Emprestado'">Status</td>
+    <td>
+      <a th:href="@{'/livros/editar/' + ${livro.id}}">Editar</a>
+      <a th:href="@{'/livros/excluir/' + ${livro.id}}"
+         onclick="return confirm('Excluir?')">Excluir</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+

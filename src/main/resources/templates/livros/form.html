@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Livro</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1 th:text="${livro.id != null} ? 'Editar Livro' : 'Novo Livro'">Novo Livro</h1>
+<div style="text-align: center; margin-bottom: 20px;">
+  <a th:href="@{/livros}">Voltar</a>
+</div>
+
+<form th:action="@{/livros/salvar}" th:object="${livro}" method="post">
+  <input type="hidden" th:field="*{id}" />
+  <div>
+    <label>Título:</label>
+    <input th:field="*{titulo}" />
+    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+  </div>
+  <div>
+    <label>Autor:</label>
+    <input th:field="*{autor}" />
+  </div>
+  <div>
+    <label>Ano:</label>
+    <div>
+      <label>Ano:</label>
+      <input type="text" th:field="*{anoPublicacao}" />
+    </div
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" th:field="*{disponivel}" />
+      Disponível
+    </label>
+  </div>
+  <button type="submit">Salvar</button>
+</form>
+</body>
+</html>
+

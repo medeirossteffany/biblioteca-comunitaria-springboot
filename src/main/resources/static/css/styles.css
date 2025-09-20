@@ -1,0 +1,299 @@
+/* Biblioteca Comunitária - Tema Rosa */
+
+/* Variáveis CSS para paleta de cores rosa */
+:root {
+    --rosa-primario: #e91e63;
+    --rosa-secundario: #f8bbd9;
+    --rosa-claro: #fce4ec;
+    --rosa-escuro: #ad1457;
+    --rosa-hover: #c2185b;
+    --branco: #ffffff;
+    --cinza-claro: #f5f5f5;
+    --cinza-medio: #9e9e9e;
+    --cinza-escuro: #424242;
+    --sombra: rgba(233, 30, 99, 0.2);
+}
+
+/* Reset básico e configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--rosa-claro) 0%, var(--branco) 100%);
+    color: var(--cinza-escuro);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Títulos */
+h1 {
+    color: var(--rosa-primario);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px var(--sombra);
+    background: linear-gradient(45deg, var(--rosa-primario), var(--rosa-escuro));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Container principal */
+body > * {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Links de navegação */
+a {
+    color: var(--rosa-primario);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 5px;
+}
+
+a:hover {
+    background-color: var(--rosa-secundario);
+    color: var(--rosa-escuro);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--sombra);
+}
+
+/* Menu de navegação principal */
+ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    background: var(--branco);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px var(--sombra);
+}
+
+ul li {
+    margin: 0 10px;
+}
+
+ul li a {
+    background: linear-gradient(45deg, var(--rosa-primario), var(--rosa-hover));
+    color: var(--branco);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px var(--sombra);
+}
+
+ul li a:hover {
+    background: linear-gradient(45deg, var(--rosa-hover), var(--rosa-escuro));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--sombra);
+}
+
+/* Tabelas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--branco);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--sombra);
+    margin: 20px 0;
+}
+
+th {
+    background: linear-gradient(45deg, var(--rosa-primario), var(--rosa-hover));
+    color: var(--branco);
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--rosa-claro);
+    transition: background-color 0.3s ease;
+}
+
+tr:hover td {
+    background-color: var(--rosa-claro);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Formulários */
+form {
+    background: var(--branco);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--sombra);
+    margin: 20px 0;
+}
+
+form div {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--rosa-escuro);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--rosa-secundario);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--cinza-claro);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--rosa-primario);
+    background: var(--branco);
+    box-shadow: 0 0 10px var(--sombra);
+    transform: translateY(-2px);
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--rosa-primario);
+    margin-right: 10px;
+}
+
+/* Botões */
+button {
+    background: linear-gradient(45deg, var(--rosa-primario), var(--rosa-hover));
+    color: var(--branco);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px var(--sombra);
+}
+
+button:hover {
+    background: linear-gradient(45deg, var(--rosa-hover), var(--rosa-escuro));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--sombra);
+}
+
+button:active {
+    transform: translateY(-1px);
+}
+
+/* Mensagens de erro */
+div[th\\:if] {
+    color: var(--rosa-escuro);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    padding: 8px;
+    background: var(--rosa-claro);
+    border-radius: 5px;
+    border-left: 4px solid var(--rosa-primario);
+}
+
+/* Links de ação nas tabelas */
+td a {
+    background: var(--rosa-secundario);
+    color: var(--rosa-escuro);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    margin: 2px;
+    transition: all 0.3s ease;
+}
+
+td a:hover {
+    background: var(--rosa-primario);
+    color: var(--branco);
+    transform: scale(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 10px 8px;
+    }
+
+    form {
+        padding: 20px;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body > * {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Efeitos especiais */
+table:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+form:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+

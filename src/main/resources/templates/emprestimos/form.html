@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Novo Empréstimo</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1>Novo Empréstimo</h1>
+<div style="text-align: center; margin-bottom: 20px;">
+  <a th:href="@{/emprestimos}">Voltar</a>
+</div>
+
+<form th:action="@{/emprestimos/salvar}" th:object="${emprestimo}" method="post">
+  <div>
+    <label>Usuário:</label>
+    <select th:field="*{usuario.id}">
+      <option value="">Selecione um usuário</option>
+      <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nome}">Usuário</option>
+    </select>
+  </div>
+  <div>
+    <label>Livro:</label>
+    <select th:field="*{livro.id}">
+      <option value="">Selecione um livro</option>
+      <option th:each="l : ${livrosDisponiveis}" th:value="${l.id}" th:text="${l.titulo}">Livro</option>
+    </select>
+  </div>
+  <div>
+    <label>Data de Retirada:</label>
+    <input type="date" th:field="*{dataRetirada}" />
+  </div>
+  <div>
+    <label>Data de Devolução:</label>
+    <input type="date" th:field="*{dataDevolucao}" />
+  </div>
+  <button type="submit">Salvar</button>
+</form>
+</body>
+</html>
+

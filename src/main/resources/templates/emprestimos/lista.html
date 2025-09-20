@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Empréstimos</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1>Empréstimos Ativos</h1>
+<div style="text-align: center; margin-bottom: 20px;">
+  <a th:href="@{/}">Home</a>
+  <a th:href="@{/emprestimos/novo}">Novo Empréstimo</a>
+</div>
+
+<table>
+  <tr>
+    <th>Usuário</th>
+    <th>Livro</th>
+    <th>Retirada</th>
+    <th>Devolução prevista</th>
+    <th>Ações</th>
+  </tr>
+  <tr th:each="e : ${emprestimos}">
+    <td th:text="${e.usuario.nome}">Usuário</td>
+    <td th:text="${e.livro.titulo}">Livro</td>
+    <td th:text="${e.dataRetirada}">Retirada</td>
+    <td th:text="${e.dataDevolucao}">Devolução</td>
+    <td>
+      <a th:href="@{'/emprestimos/devolver/' + ${e.id}}"
+         onclick="return confirm('Confirmar devolução?')">Devolver</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+
