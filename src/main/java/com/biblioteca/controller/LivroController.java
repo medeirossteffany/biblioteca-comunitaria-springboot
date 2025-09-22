@@ -1,6 +1,7 @@
 package com.biblioteca.controller;
 
 import com.biblioteca.model.Livro;
+import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.repository.LivroRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class LivroController {
 
     @Autowired
     private LivroRepository livroRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     @GetMapping
     public String listar(Model model) {
@@ -75,6 +79,13 @@ public class LivroController {
         try {
             if (!livroRepository.existsById(id)) {
                 redirectAttributes.addFlashAttribute("mensagemErro", "Livro não encontrado.");
+                return "redirect:/livros";
+            }
+
+            // Verificar se o livro está vinculado a algum empréstimo
+            boolean temEmprestimos = emprestimoRepository.existsByLivroId(id);
+            if (temEmprestimos) {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um livro vinculado a um empréstimo.");
                 return "redirect:/livros";
             }
 

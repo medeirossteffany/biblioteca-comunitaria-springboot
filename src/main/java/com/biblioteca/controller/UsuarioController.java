@@ -1,6 +1,7 @@
 package com.biblioteca.controller;
 
 import com.biblioteca.model.Usuario;
+import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     @GetMapping
     public String listar(Model model) {
@@ -63,6 +67,12 @@ public class UsuarioController {
         try {
             if (!usuarioRepository.existsById(id)) {
                 redirectAttributes.addFlashAttribute("mensagemErro", "Usuário não encontrado.");
+                return "redirect:/usuarios";
+            }
+
+            boolean temEmprestimos = emprestimoRepository.existsByUsuarioId(id);
+            if (temEmprestimos) {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um usuário vinculado a um empréstimo.");
                 return "redirect:/usuarios";
             }
 

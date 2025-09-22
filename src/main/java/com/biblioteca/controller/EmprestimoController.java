@@ -73,7 +73,7 @@ public class EmprestimoController {
         }
 
         try {
-            // CORREÇÃO: Buscar as entidades completas do banco de dados
+
             Usuario usuario = usuarioRepository.findById(emprestimo.getUsuario().getId())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
