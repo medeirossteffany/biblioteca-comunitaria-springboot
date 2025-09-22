@@ -2,6 +2,7 @@ package com.biblioteca.controller;
 
 import com.biblioteca.model.Emprestimo;
 import com.biblioteca.model.Livro;
+import com.biblioteca.model.Usuario;
 import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.repository.LivroRepository;
 import com.biblioteca.repository.UsuarioRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,65 +40,91 @@ public class EmprestimoController {
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("emprestimo", new Emprestimo());
-        // só listar livros disponíveis
         model.addAttribute("livros", livroRepository.findByDisponivelTrue());
         model.addAttribute("usuarios", usuarioRepository.findAll());
         return "emprestimos/form";
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid @ModelAttribute Emprestimo emprestimo, BindingResult result, Model model) {
-        // validações básicas
+    public String salvar(@Valid @ModelAttribute Emprestimo emprestimo, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        // Recarregar listas para o formulário em caso de erro
+        model.addAttribute("livros", livroRepository.findByDisponivelTrue());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+
         if (result.hasErrors()) {
-            model.addAttribute("livros", livroRepository.findByDisponivelTrue());
-            model.addAttribute("usuarios", usuarioRepository.findAll());
             return "emprestimos/form";
         }
 
-        // checar datas: devolução deve ser posterior à retirada
+        // Validação de datas
         LocalDate retirada = emprestimo.getDataRetirada();
         LocalDate devolucao = emprestimo.getDataDevolucao();
+        LocalDate hoje = LocalDate.now();
+
+        // Validar se a data de retirada não é no futuro
+        if (retirada != null && retirada.isAfter(hoje)) {
+            result.rejectValue("dataRetirada", "error.emprestimo", "A data de retirada não pode ser no futuro.");
+            return "emprestimos/form";
+        }
+
+        // Validar se a data de devolução é posterior à data de retirada
         if (retirada == null || devolucao == null || !devolucao.isAfter(retirada)) {
             result.rejectValue("dataDevolucao", "error.emprestimo", "A data de devolução deve ser posterior à data de retirada.");
-            model.addAttribute("livros", livroRepository.findByDisponivelTrue());
-            model.addAttribute("usuarios", usuarioRepository.findAll());
             return "emprestimos/form";
         }
 
-        // checar se livro está disponível
-        Livro livro = livroRepository.findById(emprestimo.getLivro().getId())
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        try {
+            // CORREÇÃO: Buscar as entidades completas do banco de dados
+            Usuario usuario = usuarioRepository.findById(emprestimo.getUsuario().getId())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!livro.isDisponivel()) {
-            result.rejectValue("livro", "error.emprestimo", "Livro não disponível.");
-            model.addAttribute("livros", livroRepository.findByDisponivelTrue());
-            model.addAttribute("usuarios", usuarioRepository.findAll());
-            return "emprestimos/form";
+            Livro livro = livroRepository.findById(emprestimo.getLivro().getId())
+                    .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+            if (!livro.isDisponivel()) {
+                result.rejectValue("livro", "error.emprestimo", "Livro não disponível.");
+                return "emprestimos/form";
+            }
+
+            // Definir as entidades completas no empréstimo
+            emprestimo.setUsuario(usuario);
+            emprestimo.setLivro(livro);
+            emprestimo.setAtivo(true);
+
+            // Marcar livro como emprestado e salvar empréstimo
+            livro.setDisponivel(false);
+            livroRepository.save(livro);
+            emprestimoRepository.save(emprestimo);
+
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Empréstimo criado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao criar empréstimo: " + e.getMessage());
         }
-
-        // marcar livro como emprestado e salvar empréstimo
-        livro.setDisponivel(false);
-        livroRepository.save(livro);
-
-        emprestimo.setAtivo(true);
-        emprestimoRepository.save(emprestimo);
 
         return "redirect:/emprestimos";
     }
 
     @GetMapping("/devolver/{id}")
-    public String devolver(@PathVariable Long id) {
-        Emprestimo emp = emprestimoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+    public String devolver(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Emprestimo emp = emprestimoRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
-        if (emp.isAtivo()) {
-            emp.setAtivo(false);
-            emprestimoRepository.save(emp);
+            if (emp.isAtivo()) {
+                emp.setAtivo(false);
+                emprestimoRepository.save(emp);
 
-            Livro livro = emp.getLivro();
-            livro.setDisponivel(true);
-            livroRepository.save(livro);
+                Livro livro = emp.getLivro();
+                livro.setDisponivel(true);
+                livroRepository.save(livro);
+
+                redirectAttributes.addFlashAttribute("mensagemSucesso", "Livro devolvido com sucesso!");
+            } else {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Este empréstimo já foi finalizado.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao devolver livro: " + e.getMessage());
         }
+
         return "redirect:/emprestimos";
     }
 }

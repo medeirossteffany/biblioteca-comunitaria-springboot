@@ -19,24 +19,28 @@
       <option value="">Selecione um usuário</option>
       <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nome}">Usuário</option>
     </select>
+    <div th:if="${#fields.hasErrors('usuario' )}" th:errors="*{usuario}" style="color: red;"></div>
   </div>
 
   <div>
     <label for="livro">Livro:</label>
     <select id="livro" th:field="*{livro.id}">
       <option value="">Selecione um livro</option>
-      <option th:each="l : ${livrosDisponiveis}" th:value="${l.id}" th:text="${l.titulo}">Livro</option>
+      <option th:each="l : ${livros}" th:value="${l.id}" th:text="${l.titulo}">Livro</option>
     </select>
+    <div th:if="${#fields.hasErrors('livro')}" th:errors="*{livro}" style="color: red;"></div>
   </div>
 
   <div>
     <label for="dataRetirada">Data de Retirada:</label>
     <input id="dataRetirada" type="date" th:field="*{dataRetirada}" />
+    <div th:if="${#fields.hasErrors('dataRetirada')}" th:errors="*{dataRetirada}" style="color: red;"></div>
   </div>
 
   <div>
     <label for="dataDevolucao">Data de Devolução:</label>
     <input id="dataDevolucao" type="date" th:field="*{dataDevolucao}" />
+    <div th:if="${#fields.hasErrors('dataDevolucao')}" th:errors="*{dataDevolucao}" style="color: red;"></div>
   </div>
 
   <button type="submit">Salvar</button>

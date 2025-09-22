@@ -7,21 +7,22 @@
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Novo Usuário</h1>
+<h1 th:text="${usuario.id != null} ? 'Editar Usuário' : 'Novo Usuário'">Novo Usuário</h1>
 <div style="text-align: center; margin-bottom: 20px;">
   <a th:href="@{/usuarios}">Voltar</a>
 </div>
 
 <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
+  <input type="hidden" th:field="*{id}" />
   <div>
     <label>Nome:</label>
     <input type="text" th:field="*{nome}" />
-    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    <div th:if="${#fields.hasErrors('nome' )}" th:errors="*{nome}" style="color: red;"></div>
   </div>
   <div>
     <label>Email:</label>
-    <input type="text" th:field="*{email}" />
-    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <input type="email" th:field="*{email}" />
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></div>
   </div>
   <button type="submit">Salvar</button>
 </form>

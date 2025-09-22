@@ -3,37 +3,50 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Livros</title>
+  <title>Lista de Livros</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Livros</h1>
+<h1>Lista de Livros</h1>
+
+<!-- Notificações -->
+<div th:if="${mensagemSucesso}" style="color: green; margin-bottom: 20px; padding: 10px; border: 1px solid green; background-color: #f0fff0;">
+  <span th:text="${mensagemSucesso}"></span>
+</div>
+<div th:if="${mensagemErro}" style="color: red; margin-bottom: 20px; padding: 10px; border: 1px solid red; background-color: #fff0f0;">
+  <span th:text="${mensagemErro}"></span>
+</div>
+
 <div style="text-align: center; margin-bottom: 20px;">
-  <a th:href="@{/}">Home</a>
+  <a th:href="@{/}">Início</a> |
   <a th:href="@{/livros/novo}">Novo Livro</a>
-  <a th:href="@{/livros/disponiveis}">Somente disponíveis</a>
 </div>
 
 <table>
+  <thead>
   <tr>
+    <th>ID</th>
     <th>Título</th>
     <th>Autor</th>
     <th>Ano</th>
     <th>Status</th>
     <th>Ações</th>
   </tr>
+  </thead>
+  <tbody>
   <tr th:each="livro : ${livros}">
+    <td th:text="${livro.id}">1</td>
     <td th:text="${livro.titulo}">Título</td>
     <td th:text="${livro.autor}">Autor</td>
-    <td th:text="${livro.anoPublicacao}">Ano</td>
+    <td th:text="${livro.anoPublicacao}">2023</td>
     <td th:text="${livro.disponivel} ? 'Disponível' : 'Emprestado'">Status</td>
     <td>
-      <a th:href="@{'/livros/editar/' + ${livro.id}}">Editar</a>
-      <a th:href="@{'/livros/excluir/' + ${livro.id}}"
-         onclick="return confirm('Excluir?')">Excluir</a>
+      <a th:href="@{/livros/editar/{id}(id=${livro.id} )}">Editar</a> |
+      <a th:href="@{/livros/excluir/{id}(id=${livro.id})}"
+         onclick="return confirm('Tem certeza que deseja excluir este livro?')">Excluir</a>
     </td>
   </tr>
+  </tbody>
 </table>
 </body>
 </html>
-

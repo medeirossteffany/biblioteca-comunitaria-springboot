@@ -17,7 +17,7 @@
   <div>
     <label>Título:</label>
     <input type="text" th:field="*{titulo}" />
-    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+    <div th:if="${#fields.hasErrors('titulo' )}" th:errors="*{titulo}" style="color: red;"></div>
   </div>
   <div>
     <label>Autor:</label>
@@ -25,7 +25,8 @@
   </div>
   <div>
     <label>Ano:</label>
-    <input type="text" th:field="*{anoPublicacao}" />
+    <input type="number" th:field="*{anoPublicacao}" />
+    <div th:if="${#fields.hasErrors('anoPublicacao')}" th:errors="*{anoPublicacao}" style="color: red;"></div>
   </div>
   <div>
     <label>
@@ -37,4 +38,3 @@
 </form>
 </body>
 </html>
-

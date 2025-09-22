@@ -3,35 +3,49 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Empréstimos</title>
+  <title>Lista de Empréstimos</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Empréstimos Ativos</h1>
+<h1>Lista de Empréstimos Ativos</h1>
+
+<!-- Notificações -->
+<div th:if="${mensagemSucesso}" style="color: green; margin-bottom: 20px; padding: 10px; border: 1px solid green; background-color: #f0fff0;">
+  <span th:text="${mensagemSucesso}"></span>
+</div>
+<div th:if="${mensagemErro}" style="color: red; margin-bottom: 20px; padding: 10px; border: 1px solid red; background-color: #fff0f0;">
+  <span th:text="${mensagemErro}"></span>
+</div>
+
 <div style="text-align: center; margin-bottom: 20px;">
-  <a th:href="@{/}">Home</a>
+  <a th:href="@{/}">Início</a> |
   <a th:href="@{/emprestimos/novo}">Novo Empréstimo</a>
 </div>
 
 <table>
+  <thead>
   <tr>
+    <th>ID</th>
     <th>Usuário</th>
     <th>Livro</th>
-    <th>Retirada</th>
-    <th>Devolução prevista</th>
+    <th>Data Retirada</th>
+    <th>Data Devolução</th>
     <th>Ações</th>
   </tr>
-  <tr th:each="e : ${emprestimos}">
-    <td th:text="${e.usuario.nome}">Usuário</td>
-    <td th:text="${e.livro.titulo}">Livro</td>
-    <td th:text="${e.dataRetirada}">Retirada</td>
-    <td th:text="${e.dataDevolucao}">Devolução</td>
+  </thead>
+  <tbody>
+  <tr th:each="emprestimo : ${emprestimos}">
+    <td th:text="${emprestimo.id}">1</td>
+    <td th:text="${emprestimo.usuario.nome}">Usuário</td>
+    <td th:text="${emprestimo.livro.titulo}">Livro</td>
+    <td th:text="${emprestimo.dataRetirada}">Data</td>
+    <td th:text="${emprestimo.dataDevolucao}">Data</td>
     <td>
-      <a th:href="@{'/emprestimos/devolver/' + ${e.id}}"
-         onclick="return confirm('Confirmar devolução?')">Devolver</a>
+      <a th:href="@{/emprestimos/devolver/{id}(id=${emprestimo.id} )}"
+         onclick="return confirm('Confirma a devolução deste livro?')">Devolver</a>
     </td>
   </tr>
+  </tbody>
 </table>
 </body>
 </html>
-

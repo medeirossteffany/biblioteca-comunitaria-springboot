@@ -3,25 +3,46 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Usuários</title>
+  <title>Lista de Usuários</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Usuários</h1>
+<h1>Lista de Usuários</h1>
+
+<!-- Notificações -->
+<div th:if="${mensagemSucesso}" style="color: green; margin-bottom: 20px; padding: 10px; border: 1px solid green; background-color: #f0fff0;">
+  <span th:text="${mensagemSucesso}"></span>
+</div>
+<div th:if="${mensagemErro}" style="color: red; margin-bottom: 20px; padding: 10px; border: 1px solid red; background-color: #fff0f0;">
+  <span th:text="${mensagemErro}"></span>
+</div>
+
 <div style="text-align: center; margin-bottom: 20px;">
-  <a th:href="@{/}">Home</a>
+  <a th:href="@{/}">Início</a> |
   <a th:href="@{/usuarios/novo}">Novo Usuário</a>
 </div>
 
 <table>
+  <thead>
   <tr>
+    <th>ID</th>
     <th>Nome</th>
     <th>Email</th>
+    <th>Ações</th>
   </tr>
-  <tr th:each="u : ${usuarios}">
-    <td th:text="${u.nome}">Nome</td>
-    <td th:text="${u.email}">Email</td>
+  </thead>
+  <tbody>
+  <tr th:each="usuario : ${usuarios}">
+    <td th:text="${usuario.id}">1</td>
+    <td th:text="${usuario.nome}">Nome</td>
+    <td th:text="${usuario.email}">Email</td>
+    <td>
+      <a th:href="@{/usuarios/editar/{id}(id=${usuario.id} )}">Editar</a> |
+      <a th:href="@{/usuarios/excluir/{id}(id=${usuario.id})}"
+         onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+    </td>
   </tr>
+  </tbody>
 </table>
 </body>
 </html>
