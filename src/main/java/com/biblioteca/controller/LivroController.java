@@ -3,6 +3,7 @@ package com.biblioteca.controller;
 import com.biblioteca.model.Livro;
 import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.repository.LivroRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,6 +76,7 @@ public class LivroController {
     }
 
     @GetMapping("/excluir/{id}")
+    @Transactional
     public String excluir(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             if (!livroRepository.existsById(id)) {
@@ -82,13 +84,17 @@ public class LivroController {
                 return "redirect:/livros";
             }
 
-            // Verificar se o livro está vinculado a algum empréstimo
-            boolean temEmprestimos = emprestimoRepository.existsByLivroId(id);
-            if (temEmprestimos) {
-                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um livro vinculado a um empréstimo.");
+            // Verificar se o livro tem empréstimos ATIVOS
+            boolean temEmprestimosAtivos = emprestimoRepository.existsByLivroIdAndAtivoTrue(id);
+            if (temEmprestimosAtivos) {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um livro vinculado a um empréstimo ativo.");
                 return "redirect:/livros";
             }
 
+            // Excluir primeiro todos os empréstimos inativos deste livro
+            emprestimoRepository.deleteByLivroIdAndAtivoFalse(id);
+
+            // Agora excluir o livro
             livroRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Livro excluído com sucesso!");
         } catch (Exception e) {

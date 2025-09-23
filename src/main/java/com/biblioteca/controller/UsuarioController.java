@@ -3,6 +3,7 @@ package com.biblioteca.controller;
 import com.biblioteca.model.Usuario;
 import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,6 +64,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/excluir/{id}")
+    @Transactional
     public String excluir(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             if (!usuarioRepository.existsById(id)) {
@@ -70,12 +72,17 @@ public class UsuarioController {
                 return "redirect:/usuarios";
             }
 
-            boolean temEmprestimos = emprestimoRepository.existsByUsuarioId(id);
-            if (temEmprestimos) {
-                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um usuário vinculado a um empréstimo.");
+            // Verificar se o usuário tem empréstimos ATIVOS
+            boolean temEmprestimosAtivos = emprestimoRepository.existsByUsuarioIdAndAtivoTrue(id);
+            if (temEmprestimosAtivos) {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um usuário vinculado a um empréstimo ativo.");
                 return "redirect:/usuarios";
             }
 
+            // Excluir primeiro todos os empréstimos inativos deste usuário
+            emprestimoRepository.deleteByUsuarioIdAndAtivoFalse(id);
+
+            // Agora excluir o usuário
             usuarioRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário excluído com sucesso!");
         } catch (Exception e) {

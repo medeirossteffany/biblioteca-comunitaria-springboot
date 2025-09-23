@@ -2,6 +2,7 @@ package com.biblioteca.repository;
 
 import com.biblioteca.model.Emprestimo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,6 +11,14 @@ import java.util.List;
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     List<Emprestimo> findByAtivoTrue();
 
-    boolean existsByLivroId(Long livroId);
-    boolean existsByUsuarioId(Long usuarioId);
+    // Métodos para verificar empréstimos ativos
+    boolean existsByLivroIdAndAtivoTrue(Long livroId);
+    boolean existsByUsuarioIdAndAtivoTrue(Long usuarioId);
+
+    // Métodos para excluir empréstimos inativos
+    @Modifying
+    void deleteByLivroIdAndAtivoFalse(Long livroId);
+
+    @Modifying
+    void deleteByUsuarioIdAndAtivoFalse(Long usuarioId);
 }
