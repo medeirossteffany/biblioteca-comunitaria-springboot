@@ -13,9 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.time.LocalDate;
 import java.util.List;
+
+/**
+ * Controlador responsável por gerenciar empréstimos de livros,
+ * permitindo listar, criar e devolver empréstimos, garantindo
+ * regras de disponibilidade e validade das datas.
+ */
 
 @Controller
 @RequestMapping("/emprestimos")
@@ -47,7 +52,7 @@ public class EmprestimoController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Emprestimo emprestimo, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        // Recarregar listas para o formulário em caso de erro
+
         model.addAttribute("livros", livroRepository.findByDisponivelTrue());
         model.addAttribute("usuarios", usuarioRepository.findAll());
 
@@ -55,18 +60,15 @@ public class EmprestimoController {
             return "emprestimos/form";
         }
 
-        // Validação de datas
         LocalDate retirada = emprestimo.getDataRetirada();
         LocalDate devolucao = emprestimo.getDataDevolucao();
         LocalDate hoje = LocalDate.now();
 
-        // Validar se a data de retirada não é no futuro
         if (retirada != null && retirada.isAfter(hoje)) {
             result.rejectValue("dataRetirada", "error.emprestimo", "A data de retirada não pode ser no futuro.");
             return "emprestimos/form";
         }
 
-        // Validar se a data de devolução é posterior à data de retirada
         if (retirada == null || devolucao == null || !devolucao.isAfter(retirada)) {
             result.rejectValue("dataDevolucao", "error.emprestimo", "A data de devolução deve ser posterior à data de retirada.");
             return "emprestimos/form";
@@ -85,12 +87,10 @@ public class EmprestimoController {
                 return "emprestimos/form";
             }
 
-            // Definir as entidades completas no empréstimo
             emprestimo.setUsuario(usuario);
             emprestimo.setLivro(livro);
             emprestimo.setAtivo(true);
 
-            // Marcar livro como emprestado e salvar empréstimo
             livro.setDisponivel(false);
             livroRepository.save(livro);
             emprestimoRepository.save(emprestimo);

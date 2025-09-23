@@ -4,6 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Entidade que representa um usuário da biblioteca.
+ * Contém informações básicas como nome e email.
+ */
+
+
 @Entity
 public class Usuario {
     @Id
@@ -17,7 +23,6 @@ public class Usuario {
     @Email(message = "Email inválido")
     private String email;
 
-    // getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

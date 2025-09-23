@@ -12,6 +12,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controlador responsável por gerenciar usuários,
+ * permitindo listar, cadastrar, editar e excluir,
+ * com verificação de vínculos em empréstimos ativos
+ * antes da exclusão.
+ */
+
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -72,17 +79,14 @@ public class UsuarioController {
                 return "redirect:/usuarios";
             }
 
-            // Verificar se o usuário tem empréstimos ATIVOS
             boolean temEmprestimosAtivos = emprestimoRepository.existsByUsuarioIdAndAtivoTrue(id);
             if (temEmprestimosAtivos) {
                 redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir um usuário vinculado a um empréstimo ativo.");
                 return "redirect:/usuarios";
             }
 
-            // Excluir primeiro todos os empréstimos inativos deste usuário
             emprestimoRepository.deleteByUsuarioIdAndAtivoFalse(id);
 
-            // Agora excluir o usuário
             usuarioRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário excluído com sucesso!");
         } catch (Exception e) {

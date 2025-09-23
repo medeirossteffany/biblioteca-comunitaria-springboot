@@ -3,6 +3,12 @@ package com.biblioteca.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Entidade que representa um livro na biblioteca.
+ * Contém título, autor, ano de publicação e status de disponibilidade.
+ */
+
+
 @Entity
 public class Livro {
     @Id
@@ -18,7 +24,6 @@ public class Livro {
 
     private boolean disponivel = true;
 
-    // getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -4,6 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+/**
+ * Entidade que representa um empréstimo de livro na biblioteca.
+ * Contém as informações do livro, usuário, datas de retirada e devolução,
+ * além do status indicando se o empréstimo está ativo.
+ */
+
+
 @Entity
 public class Emprestimo {
     @Id
@@ -26,7 +33,6 @@ public class Emprestimo {
 
     private boolean ativo = true;
 
-    // getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

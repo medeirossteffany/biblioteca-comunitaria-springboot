@@ -7,15 +7,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repositório para operações de acesso a dados de empréstimos.
+ * Fornece métodos para buscar empréstimos ativos, verificar vínculos
+ * e excluir registros inativos.
+ */
+
 @Repository
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     List<Emprestimo> findByAtivoTrue();
 
-    // Métodos para verificar empréstimos ativos
     boolean existsByLivroIdAndAtivoTrue(Long livroId);
     boolean existsByUsuarioIdAndAtivoTrue(Long usuarioId);
 
-    // Métodos para excluir empréstimos inativos
     @Modifying
     void deleteByLivroIdAndAtivoFalse(Long livroId);
 
