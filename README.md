@@ -35,7 +35,9 @@ Aplicação web simples para gerenciamento de livros e empréstimos de uma **bib
 ## 🔧 Requisitos Técnicos
 
 - **Spring Boot** (Web, JPA, Thymeleaf).  
-- Banco de dados **H2** (padrão).  
+- Banco de dados **H2** (padrão).
+
+---
 
 ## ▶️ Como Executar
 
