@@ -1,6 +1,6 @@
 # 📚 Projeto Biblioteca Online - CP05 (FIAP)
 
-![Tela do Sistema](docs/screenshot.png)
+![Tela do Sistema](/Users/steffanymedeiros/Downloads/biblioteca-comunitaria-springboot/src/main/resources/static/css/capturadetela.png)
 
 > **CP05 - DDD - Projeto Biblioteca Online - Spring Boot**  
 
@@ -39,3 +39,8 @@ Aplicação web simples para gerenciamento de livros e empréstimos de uma **bib
 - **Spring Boot** (Web, JPA, Thymeleaf).  
 - Banco de dados **H2** (padrão).  
 
+# ▶️ Como Executar
+
+Basta rodar a classe principal `BibliotecaApplication.java`.  
+A aplicação será iniciada em:
+http://localhost:8080
